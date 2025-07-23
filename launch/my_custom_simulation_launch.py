@@ -190,7 +190,7 @@ def generate_launch_description():
     # This is the most critical change for the world file
     declare_world_cmd = DeclareLaunchArgument(
         'world',
-        default_value=os.path.join(my_bringup_dir, 'worlds', 'office.sdf.xacro'), # <--- CHANGE THIS LINE
+        default_value=os.path.join(my_bringup_dir, 'worlds', 'house2.sdf.xacro'), #'office.sdf.xacro'), # <--- CHANGE THIS LINE
         description='Full path to world model file to load')
     # --- CHANGE END ---
 

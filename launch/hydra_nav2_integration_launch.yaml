@@ -1,0 +1,35 @@
+---
+launch:
+  - arg: {name: scene, default: office, description: uhumans2 scene name}
+  - arg: {name: use_gt_semantics, default: 'false'}
+  - arg: {name: labelspace, default: $(if $(var use_gt_semantics) uhumans2_$(var scene) ade20k_full)}
+  - arg: {name: log_prefix, default: uhumans2_$(var scene)}
+  - arg: {name: label_remap_path, default: $(find-pkg-share hydra)/config/label_remaps/uhumans2_$(var scene).yaml}
+  - arg: {name: labelspace_name_inference, default: ade20k_mit}
+  - set_remap: {from: hydra/input/camera/rgb/image_raw, to: /world/default/model/turtlebot3_waffle/link/camera_link/sensor/intel_realsense_r200_depth/image}
+  - set_remap: {from: hydra/input/camera/rgb/camera_info, to: /world/default/model/turtlebot3_waffle/link/camera_link/sensor/intel_realsense_r200_depth/camera_info}
+  - set_remap: {from: hydra/input/camera/depth_registered/image_rect, to: /world/default/model/turtlebot3_waffle/link/camera_link/sensor/intel_realsense_r200_depth/depth_image}
+  - set_remap: {from: hydra/input/camera/semantic/image_raw, to: semantic/image_raw, if: $(not $(var use_gt_semantics))}
+  - let: {name: extra_yaml_gt, value: '{semantic_label_remap_filepath: $(var label_remap_path)}'}
+  - let: {name: extra_yaml_no_gt, value: '{}'}
+  - group:
+    - set_remap: {from: color/image_raw, to: /world/default/model/turtlebot3_waffle/link/camera_link/sensor/intel_realsense_r200_depth/image}
+    - include:
+        if: $(not $(var use_gt_semantics))
+        file: $(find-pkg-share semantic_inference_ros)/launch/closed_set.launch.yaml
+        arg:
+          - {name: labelspace_name, value: $(var labelspace_name_inference)}
+  - node:
+      pkg: hydra_ros
+      exec: hydra_ros_node
+      name: hydra
+      args: >
+        --config-utilities-file $(find-pkg-share hydra_mesh_bringup)/config/hydra_pipeline.yaml
+        --config-utilities-file $(find-pkg-share hydra)/config/label_spaces/$(var labelspace_name_inference)_label_space.yaml
+        --config-utilities-yaml {log_path: $(env HOME)/.hydra/$(var log_prefix)}
+        --config-utilities-yaml {map_frame: map, odom_frame: odom, robot_frame: base_link, sensor_frame: intel_realsense_r200_depth_link}
+        --config-utilities-yaml {enable_lcd: false}
+        --config-utilities-yaml {dataset: uhumans2}
+  - set_remap: {from: hydra_visualizer/dsg, to: hydra/backend/dsg}
+  - include:
+      file: $(find-pkg-share hydra_visualizer)/launch/streaming_visualizer.launch.yaml

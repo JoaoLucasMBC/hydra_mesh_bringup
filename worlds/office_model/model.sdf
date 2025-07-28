@@ -7,11 +7,11 @@
           <mesh>
             <uri>model://office_model/meshes/dsg_mesh.obj</uri>  </mesh>
         </geometry>
-        <!--<material>
+        <material>
           <ambient>0.6 0.6 0.6 1</ambient>
           <diffuse>0.6 0.6 0.6 1</diffuse>
           <specular>0.1 0.1 0.1 1</specular>
-        </material>-->
+        </material>
       </visual>
       <collision name="collision">
         <geometry>

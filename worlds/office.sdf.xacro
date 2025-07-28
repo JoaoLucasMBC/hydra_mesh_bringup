@@ -79,7 +79,7 @@
     <model name="office_world">
       <static>1</static>
       <include>
-        <uri>model://office_model</uri> <pose>10 -30 -1 0 0 0</pose>     
+        <uri>model://office_model</uri>     
       </include>
     </model>
 

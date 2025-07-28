@@ -83,9 +83,9 @@ def generate_launch_description():
     # Modify default values for robot spawn pose (x, y, z, R, P, Y)
     # These values need to be adjusted based on your kitchen.stl layout.
     # Start with some reasonable values (e.g., slightly offset from origin) and adjust after seeing the sim.
-    pose = {'x': LaunchConfiguration('x_pose', default='0.00'), # Example: Changed from '-2.00'
-            'y': LaunchConfiguration('y_pose', default='0.00'), # Example: Changed from '-0.50'
-            'z': LaunchConfiguration('z_pose', default='0.01'), # Keep z small to be on the ground
+    pose = {'x': LaunchConfiguration('x_pose', default='-10.00'), # Example: Changed from '-2.00'
+            'y': LaunchConfiguration('y_pose', default='30.00'), # Example: Changed from '-0.50'
+            'z': LaunchConfiguration('z_pose', default='1.00'), # Keep z small to be on the ground
             'R': LaunchConfiguration('roll', default='0.00'),
             'P': LaunchConfiguration('pitch', default='0.00'),
             'Y': LaunchConfiguration('yaw', default='0.00')} # Example: Changed for initial orientation
@@ -190,7 +190,7 @@ def generate_launch_description():
     # This is the most critical change for the world file
     declare_world_cmd = DeclareLaunchArgument(
         'world',
-        default_value=os.path.join(my_bringup_dir, 'worlds', 'house2.sdf.xacro'), #'office.sdf.xacro'), # <--- CHANGE THIS LINE
+        default_value=os.path.join(my_bringup_dir, 'worlds', 'office.sdf.xacro'), #'office.sdf.xacro'), # <--- CHANGE THIS LINE
         description='Full path to world model file to load')
     # --- CHANGE END ---
 
